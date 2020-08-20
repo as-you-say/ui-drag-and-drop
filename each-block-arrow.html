@@ -56,6 +56,10 @@
           background-color: #fff;
           opacity: 0.1;
         }
+        .empty.no {
+          background-color: #fff;
+          opacity: 1;
+        }
         .empty:after {
           content: '';
           position: absolute;
@@ -80,19 +84,57 @@
     <section id="canvas" class="canvas"></section>
 </body>
 <script>
-    document.querySelector('.card').addEventListener('dragend', function(e1){
+    document.querySelector('.card').addEventListener('dragend', function(event){
         var dom = document.createElement('div');
         var empty = document.createElement('div');
         empty.className = 'empty';
         dom.appendChild(empty);
         dom.className = 'card block';
         dom.draggable = true;
-        dom.style.left = (e1.x-50) + 'px';
-        dom.style.top = (e1.y-50) + 'px';
+        dom.style.left = (event.x-50) + 'px';
+        dom.style.top = (event.y-50) + 'px';
         dom.style['z-index'] = 10;
-        dom.addEventListener('dragend', function(e2){
-            dom.style.left = (e2.x-50) + 'px';
-            dom.style.top = (e2.y-50) + 'px';
+
+        dom.addEventListener('touchstart', function(e){
+            dom.style.left = (e.x-50) + 'px';
+            dom.style.top = (e.y-50) + 'px';
+        })
+        dom.addEventListener('dragend', function(e){
+            dom.style.left = (e.x-50) + 'px';
+            dom.style.top = (e.y-50) + 'px';
+        })
+        dom.firstChild.addEventListener('dragover', function(e){
+            e.stopPropagation();
+            e.preventDefault();
+
+            var isIn = e.x>dom.offsetLeft && e.x<dom.offsetLeft+200 && e.y>dom.offsetTop && e.y<dom.offsetTop+100;
+            if (isIn) {
+                e.currentTarget.className = 'empty no';
+            } else {
+                e.currentTarget.className = 'empty';
+            }
+        })
+        dom.firstChild.addEventListener('dragleave', function(e){
+            e.stopPropagation();
+            e.preventDefault();
+
+            var isIn = e.x>dom.offsetLeft && e.x<dom.offsetLeft+200 && e.y>dom.offsetTop && e.y<dom.offsetTop+100;
+            if (isIn) {
+                e.currentTarget.className = 'empty no';
+            } else {
+                e.currentTarget.className = 'empty';
+            }
+        })
+        dom.firstChild.addEventListener('drop', function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            
+            var isIn = e.x>dom.offsetLeft && e.x<dom.offsetLeft+200 && e.y>dom.offsetTop && e.y<dom.offsetTop+100;
+            if (isIn) {
+                e.currentTarget.className = 'empty no';
+            } else {
+                e.currentTarget.className = 'empty';
+            }
         })
         document.querySelector('#canvas').appendChild(dom);
     })
