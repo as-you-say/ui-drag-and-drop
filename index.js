@@ -9,7 +9,7 @@ var onDragEnd = function(e1){
     dom.style['z-index'] = 2;
     
     var label = e1.currentTarget.attributes['data-name'].value;
-    dom.innerHTML = label;
+    dom.innerHTML = '<div class="label">'+label+'</div>';
 
     // 이동
     dom.style.left = (e1.x-50) + 'px';
