@@ -24,8 +24,8 @@ var onDragEnd = function(e1){
     dom.appendChild(label);
     
     // 이동
-    dom.style.left = (e1.x-50) + 'px';
-    dom.style.top = (e1.y-50) + 'px';
+    dom.style.left = (e1.pageX-50) + 'px';
+    dom.style.top = (e1.pageY-50) + 'px';
 
     // 우측 빈칸
     var empty = document.createElement('div');
