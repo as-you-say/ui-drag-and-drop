@@ -1,8 +1,10 @@
 var Block = function(target, innerHTML){
+    // Dom - Drag Block
     var blockMenu = document.getElementById(target);
     blockMenu.draggable= true;
     blockMenu.style.cursor = 'move';
     
+    // Dom - Block Shadow
     var block = document.createElement('div');
     document.body.appendChild(block);
     block.className = 'block'
