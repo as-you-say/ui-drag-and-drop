@@ -7,6 +7,12 @@
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <script src='./component/Block.js'></script>
     <style>
+        .component {
+            display: inline-block;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #333;
+        }
         .wow {
             display: inline-block;
             padding: 100px;
@@ -17,12 +23,45 @@
             cursor: move;
             text-decoration: none;
         }
+        .point {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background-color: #333;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 2;
+        }
+        .point.prev {
+            position: absolute;
+            left: -5px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .point.prev:hover {
+            transition: .3s;
+            width: 20px;
+            height: 20px;
+            left: -10px;
+        }
+        .point.next {
+            position: absolute;
+            right: -5px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .point.next:hover {
+            transition: .3s;
+            width: 20px;
+            height: 20px;
+            right: -10px;
+        }
     </style>
 </head>
 <body>
-    <div id="move">이동해바</div>
+    <div id="move" class="component">Drag !!!</div>
     <script>
-        new Block('move', '<label class="wow" href="#"><span>하하~</span></label>');
+        new Block('move', '<span class="wow" href="#">Haha~</span>');
     </script>
 </body>
 </html>
