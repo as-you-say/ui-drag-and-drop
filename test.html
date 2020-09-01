@@ -44,6 +44,12 @@
             height: 20px;
             left: -10px;
         }
+        .point.prev.on {
+            background-color: #ddee00;
+            width: 20px;
+            height: 20px;
+            left: -10px;
+        }
         .point.next {
             position: absolute;
             right: -5px;
@@ -56,10 +62,26 @@
             height: 20px;
             right: -10px;
         }
+        .point.next.on {
+            background-color: #ddee00;
+            width: 20px;
+            height: 20px;
+            right: -10px;
+        }
+        #svg {
+            position: absolute;
+            width: 100%;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
     </style>
 </head>
 <body>
+    <svg id="svg"></svg>
     <div id="move" class="component">Drag !!!</div>
+
     <script>
         new Block('move', '<span class="wow" href="#">Haha~</span>');
     </script>

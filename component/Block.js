@@ -1,3 +1,5 @@
+var nowNext;
+
 var Block = function(target, innerHTML){
     // Dom - Drag Block
     var blockMenu = document.getElementById(target);
@@ -53,23 +55,31 @@ var Block = function(target, innerHTML){
 
         // Event - prev
         prev.className = 'point prev';
-        prev.addEventListener('click', function(e){
-            prev.style.backgroundColor = '#ddee00';
-            prev.style.width = '20px';
-            prev.style.height = '20px';
-            prev.style.left = '-10px';
+        prev.addEventListener('click', function(e2){
+            prev.className = 'point prev on';
+
+            // SVG 태그에 라인 생성
+            var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            document.getElementById('svg').appendChild(line);
+            line.setAttribute("stroke", "black");
+
+            // 왼쪽 포인트
+            var np = nowNext.getBoundingClientRect();
+            line.setAttribute('x1', np.x+10);
+            line.setAttribute('y1', np.y+10);
+
+            // 오른쪽 포인트
+            var pp = prev.getBoundingClientRect();
+            line.setAttribute('x2', pp.x+10);
+            line.setAttribute('y2', pp.y+10);
         })
 
         // Event - next
         next.className = 'point next';
-        next.addEventListener('click', function(e){
-            next.style.backgroundColor = '#ddee00';
-            next.style.width = '20px';
-            next.style.height = '20px';
-            next.style.right = '-10px';
+        next.addEventListener('click', function(e2){
+            next.className = 'point next on';
+            nowNext = next;
+            console.log('시작점', e2);
         })
     })
 }
-
-
-
