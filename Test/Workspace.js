@@ -7,68 +7,6 @@ if (!('remove' in Element.prototype)) {
     };
 }
 
-var Block = function(id){
-    var blockDOM = document.createElement('div');
-    blockDOM.id = id;
-    blockDOM.style.position = 'absolute';
-
-    return {
-        // DOM - Append to workspace
-        append: function(workspace){
-            workspace.appendChild(blockDOM);
-        },
-
-        // DOM - Remove from workspace
-        remove: function(){
-            blockDOM.remove();
-        },
-
-        // DOM - Return DOM
-        getDOM: function(){
-            return blockDOM;
-        },
-
-        // DOM - Set left
-        setLeft: function(x){
-            var width = blockDOM.clientWidth;
-            blockDOM.style.left = (x+width/2)+'px';
-        },
-
-        // DOM - Set top
-        setTop: function(y){
-            var height = blockDOM.clientHeight;
-            blockDOM.style.top = (y+height/2)+'px';
-        },
-    }
-}
-
-var Line = function(id){
-    var lineDOM = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    lineDOM.id = id;
-    lineDOM.setAttribute("stroke", "black");
-
-    return {
-        append:function(lineArea){
-            lineArea.appendChild(lineDOM);
-        },
-        remove: function(){
-            lineDOM.remove();
-        },
-        setX1:function(x1){
-            lineDOM.setAttribute('x1', x1);
-        },
-        setY1:function(y1){
-            lineDOM.setAttribute('y1', y1);
-        },
-        setX2:function(x2){
-            lineDOM.setAttribute('x2', x2);
-        },
-        setY2:function(y2){
-            lineDOM.setAttribute('y2', y2);
-        }
-    }
-}
-
 var Workspace = function(target){
     // DOM Status
     var blockSeq = 0;
@@ -106,15 +44,15 @@ var Workspace = function(target){
         addBlock: function(newBlockComponent){
             // ID - Generate
             var id = 'b' + (blockSeq++);
-            newBlock.id = id;
+            newBlockComponent.setId(id);
 
             // DOM - Append to workspace
-            workspace.appendChild(newBlock);
+            workspace.appendChild(newBlockComponent.getDOM());
 
             // Status - Add block status to blocks
             blocks.push({
                 blockId: id,
-                blockComponent: newBlock
+                blockComponent: newBlockComponent
             });
         },
         removeBlock: function(blockId){
@@ -140,7 +78,7 @@ var Workspace = function(target){
         addLine: function(newLineComponent){
             // ID - Generate
             var id = 'l' + (lineSeq++);
-            newLine.id = id;
+            newLineComponent.setId(id);
 
             // DOM - Append to line area
             lineArea.appendChild(newLineComponent.getDom());
@@ -148,7 +86,7 @@ var Workspace = function(target){
             // Status - Add line status to lines
             lines.push({
                 lineId: id,
-                lineComponent: newLine
+                lineComponent: newLineComponent
             });
         },
         removeLine: function(lineId){
