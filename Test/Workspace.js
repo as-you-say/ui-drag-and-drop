@@ -167,12 +167,12 @@ var Workspace = function(target){
 
             // DOM Event - set line move event
             startBlock.onMoveRightLine(function(e){
-                line.setX1(e.pageX + startBlock.getWidth());
-                line.setY1(e.pageY + startBlock.getHeight()/2);
+                line.setX1(e.pageX);
+                line.setY1(e.pageY);
             })
             endBlock.onMoveLeftLine(function(e){
                 line.setX2(e.pageX);
-                line.setY2(e.pageY + endBlock.getHeight()/2);
+                line.setY2(e.pageY);
             })
         },
         disconnect: function(connectId){

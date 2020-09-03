@@ -2,7 +2,7 @@ var Block = function(workspace){
     var blockDOM = document.createElement('div');
     blockDOM.style.position = 'absolute';
     blockDOM.draggable = 'true';
-    blockDOM.style.backgroundColor = '#ddd';
+    blockDOM.style.backgroundColor = '#dddddd55';
     blockDOM.style.width = '200px';
     blockDOM.style.height = '200px';
 
@@ -51,7 +51,7 @@ var Block = function(workspace){
         // DOM - Set left
         setLeft: function(x){
             var width = blockDOM.clientWidth;
-            blockDOM.style.left = (x+width/2)+'px';
+            blockDOM.style.left = (x-width/2)+'px';
         },
         getWidth: function(){
             return blockDOM.clientWidth;
@@ -60,7 +60,7 @@ var Block = function(workspace){
         // DOM - Set top
         setTop: function(y){
             var height = blockDOM.clientHeight;
-            blockDOM.style.top = (y+height/2)+'px';
+            blockDOM.style.top = (y-height/2)+'px';
         },
         getHeight: function(){
             return blockDOM.clientHeight;
