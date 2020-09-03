@@ -1,12 +1,3 @@
-// Create Element.remove() function if not exist
-if (!('remove' in Element.prototype)) {
-    Element.prototype.remove = function() {
-        if (this.parentNode) {
-            this.parentNode.removeChild(this);
-        }
-    };
-}
-
 var Workspace = function(target){
     // DOM Status
     var blockSeq = 0;
@@ -32,6 +23,8 @@ var Workspace = function(target){
             lineId: ''
         }
     ];
+    var start = undefined;
+    var end = undefined;
 
     // DOM Setting
     var workspace = document.getElementById(target);
@@ -44,10 +37,10 @@ var Workspace = function(target){
     workspace.appendChild(lineArea);
 
     // Line - add/remove
-    function addLine(){
+    function addLine(startBlock, endBlock){
         // Component - Generate
         var newLine = new Line();
-
+        
         // ID - Generate
         var id = 'l' + (lineSeq++);
         newLine.setId(id);
@@ -93,22 +86,23 @@ var Workspace = function(target){
 
         // DOM Event - Dragstart / Drag / Dragend
         newBlock.onDragStart(
-            function(e){
-                var img = document.createElement("img");
-                e.dataTransfer.setDragImage(img, 0, 0);
-            }
+          function(e){
+            img = document.createElement("div");
+            e.dataTransfer.setDragImage(img, 0, 0);
+          }
         );
         newBlock.onDrag(
-            function(e){
-                newBlock.setLeft(e.pageX);
-                newBlock.setTop(e.pageY);
-            }
+          function(e){
+            console.log(e);
+            newBlock.setLeft(e.pageX);
+            newBlock.setTop(e.pageY);
+          }
         );
         newBlock.onDragEnd(
-            function(e){
-                newBlock.setLeft(e.pageX);
-                newBlock.setTop(e.pageY);
-            }
+          function(e){
+            newBlock.setLeft(e.pageX);
+            newBlock.setTop(e.pageY);
+          }
         );
 
         // Status - Add block status to blocks
@@ -150,9 +144,9 @@ var Workspace = function(target){
         // Connect - add/remove
         connect: function(startBlock, endBlock){
             // Component - Add line/startBlock/endBlock Component
-            var line = addLine();
+            var line = addLine(startBlock, endBlock);
             var startBlockId = startBlock.id;
-            var endBlockId = startBlock.id;
+            var endBlockId = endBlock.id;
 
             // ID - Generate
             var id = 'c' + (connectSeq++);
@@ -165,12 +159,20 @@ var Workspace = function(target){
                 lineId: line.id
             });
 
+            line.setX1(startBlock.getBoundingClientRect().x + 100);
+            line.setY1(startBlock.getBoundingClientRect().y + 100);
+            line.setX2(endBlock.getBoundingClientRect().x + 100);
+            line.setY2(endBlock.getBoundingClientRect().y + 100);
+
             // DOM Event - set line move event
-            startBlock.onMoveRightLine(function(e){
-                line.setX1(e.pageX);
-                line.setY1(e.pageY);
+            startBlockConponent = blocks.filter(function(o){return o.id === startBlockId;})[0].component;
+            startBlockConponent.onMoveRightLine(function(e){
+              line.setX1(e.pageX);
+              line.setY1(e.pageY);
             })
-            endBlock.onMoveLeftLine(function(e){
+
+            endBlockConponent = blocks.filter(function(o){return o.id === endBlockId;})[0].component;
+            endBlockConponent.onMoveLeftLine(function(e){
                 line.setX2(e.pageX);
                 line.setY2(e.pageY);
             })

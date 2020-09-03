@@ -1,85 +1,115 @@
-var nowNext;
+var Block = function(workspace, innerHTML){
+  var blockDOM = document.createElement('div');
+  blockDOM.className='block'
+  blockDOM.draggable = 'true';
 
-var Block = function(target, innerHTML){
-    // Dom - Drag Block
-    var blockMenu = document.getElementById(target);
-    blockMenu.draggable= true;
-    blockMenu.style.cursor = 'move';
-    
-    // Dom - Block Shadow
-    var block = document.createElement('div');
-    document.body.appendChild(block);
-    block.className = 'block'
-    block.draggable = true;
-    block.style.opacity = 0;
-    block.style.position = 'absolute';
-    block.innerHTML = innerHTML;
+  if(innerHTML !== undefined) {
+    blockDOM.innerHTML = innerHTML;
+  }
 
-    // Event - Block Shadow
-    blockMenu.addEventListener('dragstart', function(e){
-        var img = document.createElement("img");
-        e.dataTransfer.setDragImage(img, 0, 0);
-    })
-    blockMenu.addEventListener('drag', function(e){
-        block.style.opacity = 1;
-        block.style.left = e.pageX - block.clientWidth/2 + 'px';
-        block.style.top = e.pageY - block.clientHeight/2 + 'px';
-    })
-    blockMenu.addEventListener('dragend', function(e){
-        // Dom - Block Shadow
-        block.style.left = e.pageX - block.clientWidth/2 + 'px';
-        block.style.top = e.pageY - block.clientHeight/2 + 'px';
+  var moveLeftLine = function(e){};
+  var moveRightLine = function(e){};
 
-        // Dom - Block + prev + next
-        var newBlock = block.cloneNode(true);
-        var prev = document.createElement('div');
-        var next = document.createElement('div');
-        newBlock.appendChild(prev);
-        newBlock.appendChild(next);
-        document.body.appendChild(newBlock);
-        block.style.opacity = 0;
+  blockDOM.addEventListener('click', function(e){
+    var isNotSelected = (document.querySelector('.block.start') === null);
+    if (isNotSelected) {
+      blockDOM.className = 'block on start';
+      isSelected = true;
+    } else {
+      blockDOM.className = 'block on end';
+      isSelected = false;
+
+      var start = document.querySelector('.block.start');
+      var end = document.querySelector('.block.end');
+      
+      workspace.connect(start, end);
+
+      start.classList.remove('start');
+      end.classList.remove('end');
+    }
+  });
+
+
+  return {
+    // DOM - Append to workspace
+    appendTo: function(workspace){
+      workspace.appendChild(blockDOM);
+    },
+
+    // DOM - Remove from workspace
+    remove: function(){
+      blockDOM.remove();
+    },
+
+    // DOM - Set ID
+    setId:function(id){
+      blockDOM.id = id;
+    },
+
+    // DOM - Set left
+    setLeft: function(x){
+      var width = blockDOM.clientWidth;
+      blockDOM.style.left = (x-width/2)+'px';
+    },
+    getWidth: function(){
+      return blockDOM.clientWidth;
+    },
+
+    // DOM - Set top
+    setTop: function(y){
+      var height = blockDOM.clientHeight;
+      blockDOM.style.top = (y-height/2)+'px';
+    },
+    getHeight: function(){
+      return blockDOM.clientHeight;
+    },
+
+    setClass: function(className){
+      blockDOM.className = className;
+    },
+
+    // DOM Event - Set dragstart event function
+    onDragStart: function(event){
+      blockDOM.addEventListener('dragstart', function(e){
+        event(e);
+        moveLeftLine(e);
+        moveRightLine(e);
+        blockDOM.className = 'block';
+      });
+    },
+
+    // DOM Event - Set drag event function
+    onDrag: function(event){
+      blockDOM.addEventListener('drag', function(e){
+        event(e);
+        moveLeftLine(e);
+        moveRightLine(e);
+        blockDOM.className = 'block on';
+      });
+    },
+
+    // DOM Event - Set dragend event function
+    onDragEnd: function(event){
+      blockDOM.addEventListener('dragend', function(e){
+        event(e);
+        moveLeftLine(e);
+        moveRightLine(e);
+      });
+    },
+
+    // DOM Event - Set click event function
+    onClick: function(workspace, event){
         
-        // Event - Block
-        newBlock.addEventListener('dragstart', function(e2){
-            var img = document.createElement("img");
-            e2.dataTransfer.setDragImage(img, 0, 0);
-        })
-        newBlock.addEventListener('drag', function(e2){
-            newBlock.style.left = e2.pageX - newBlock.clientWidth/2 + 'px';
-            newBlock.style.top = e2.pageY - newBlock.clientHeight/2 + 'px';
-        })
-        newBlock.addEventListener('dragend', function(e2){
-            newBlock.style.left = e2.pageX - newBlock.clientWidth/2 + 'px';
-            newBlock.style.top = e2.pageY - newBlock.clientHeight/2 + 'px';
-        })
+    },
 
-        // Event - prev
-        prev.className = 'point prev';
-        prev.addEventListener('click', function(e2){
-            prev.className = 'point prev on';
+    // DOM Event - Set move left line event function
+    onMoveLeftLine: function(event){
+      moveLeftLine = event;
+    },
 
-            // SVG 태그에 라인 생성
-            var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-            document.getElementById('svg').appendChild(line);
-            line.setAttribute("stroke", "black");
-
-            // 왼쪽 포인트
-            var np = nowNext.getBoundingClientRect();
-            line.setAttribute('x1', np.x+10);
-            line.setAttribute('y1', np.y+10);
-
-            // 오른쪽 포인트
-            var pp = prev.getBoundingClientRect();
-            line.setAttribute('x2', pp.x+10);
-            line.setAttribute('y2', pp.y+10);
-        })
-
-        // Event - next
-        next.className = 'point next';
-        next.addEventListener('click', function(e2){
-            next.className = 'point next on';
-            nowNext = next;
-            console.log('시작점', e2);
-        })
-    })
+    // DOM Event - Set move right line event function
+    onMoveRightLine: function(event){
+      moveRightLine = event;
+    }
+  }
 }
