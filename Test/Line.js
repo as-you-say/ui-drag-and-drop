@@ -36,6 +36,7 @@ var Line = function(){
         // DOM - Set y2
         setY2:function(y2){
             lineDOM.setAttribute('y2', y2);
-        }
+        },
+        
     }
 }
