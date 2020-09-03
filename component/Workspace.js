@@ -87,7 +87,7 @@ var Workspace = function(target){
         // DOM Event - Dragstart / Drag / Dragend
         newBlock.onDragStart(
           function(e){
-            img = document.createElement("div");
+            img = document.createElement("img");
             e.dataTransfer.setDragImage(img, 0, 0);
           }
         );
@@ -164,13 +164,14 @@ var Workspace = function(target){
             line.setX1(e.pageX - dl);
             line.setY1(e.pageY - dt);
           })
-
           endBlockConponent = blocks.filter(function(o){return o.id === endBlockId;})[0].component;
           endBlockConponent.onMoveLeftLine(function(e){
+            console.log(e.x, e.y, 'hi');
+
             line.setX2(e.pageX - dl);
             line.setY2(e.pageY - dt);
           })
-
+          
           line.setX1(startBlock.getBoundingClientRect().x - dl + startBlockConponent.getWidth()/2);
           line.setY1(startBlock.getBoundingClientRect().y - dt + startBlockConponent.getHeight()/2);
           line.setX2(endBlock.getBoundingClientRect().x - dl + endBlockConponent.getWidth()/2);

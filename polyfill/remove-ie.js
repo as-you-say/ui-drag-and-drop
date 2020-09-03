@@ -5,3 +5,6 @@ if (!('remove' in Element.prototype)) {
       }
   };
 }
+document.addEventListener("dragover", function(e) {
+  e.preventDefault();
+}, false);
