@@ -12,15 +12,15 @@ var Workspace = function(target){
     var blockSeq = 0;
     var blocks = [
         {
-            blockId: '',
-            blockComponent: function(){}
+            id: '',
+            component: {}
         }
     ];
     var lineSeq = 0;
     var lines = [
         {
-            lineId: '',
-            lineComponent: function(){}
+            id: '',
+            component: {}
         }
     ];
     var connectSeq = 0;
@@ -41,18 +41,38 @@ var Workspace = function(target){
 
     return {
         // Block - add/remove
-        addBlock: function(newBlockComponent){
+        addBlock: function(newBlock){
             // ID - Generate
             var id = 'b' + (blockSeq++);
-            newBlockComponent.setId(id);
+            newBlock.setId(id);
 
             // DOM - Append to workspace
-            workspace.appendChild(newBlockComponent.getDOM());
+            newBlock.appendTo(workspace);
+
+            // DOM Event - Dragstart / Drag / Dragend
+            newBlock.onDragStart(
+                function(e){
+                    var img = document.createElement("img");
+                    e.dataTransfer.setDragImage(img, 0, 0);
+                }
+            );
+            newBlock.onDrag(
+                function(e){
+                    newBlock.setLeft(e.pageX);
+                    newBlock.setTop(e.pageY);
+                }
+            );
+            newBlock.onDragEnd(
+                function(e){
+                    newBlock.setLeft(e.pageX);
+                    newBlock.setTop(e.pageY);
+                }
+            );
 
             // Status - Add block status to blocks
             blocks.push({
-                blockId: id,
-                blockComponent: newBlockComponent
+                id: id,
+                component: newBlock
             });
         },
         removeBlock: function(blockId){
@@ -61,7 +81,7 @@ var Workspace = function(target){
                 var isTargetBlock = (block.id === blockId);
                 if (isTargetBlock) {
                     blocks.splice(i, 1);
-                    block.blockComponent.remove();
+                    block.component.remove();
                 }
             });
 
@@ -75,18 +95,18 @@ var Workspace = function(target){
         },
 
         // Line - add/remove
-        addLine: function(newLineComponent){
+        addLine: function(newLine){
             // ID - Generate
             var id = 'l' + (lineSeq++);
-            newLineComponent.setId(id);
+            newLine.setId(id);
 
             // DOM - Append to line area
-            lineArea.appendChild(newLineComponent.getDom());
+            newLine.appendTo(lineArea);
 
             // Status - Add line status to lines
             lines.push({
-                lineId: id,
-                lineComponent: newLineComponent
+                id: id,
+                component: newLine
             });
         },
         removeLine: function(lineId){
@@ -95,7 +115,7 @@ var Workspace = function(target){
                 var isTargetLine = (line.id === lineId);
                 if (isTargetLine) {
                     lines.splice(i, 1);
-                    line.lineComponent.remove();
+                    line.component.remove();
                 }
             });
 

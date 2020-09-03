@@ -4,18 +4,13 @@ var Block = function(){
 
     return {
         // DOM - Append to workspace
-        append: function(workspace){
+        appendTo: function(workspace){
             workspace.appendChild(blockDOM);
         },
 
         // DOM - Remove from workspace
         remove: function(){
             blockDOM.remove();
-        },
-
-        // DOM - Return DOM
-        getDOM: function(){
-            return blockDOM;
         },
 
         // DOM - Set ID
@@ -33,6 +28,21 @@ var Block = function(){
         setTop: function(y){
             var height = blockDOM.clientHeight;
             blockDOM.style.top = (y+height/2)+'px';
+        },
+
+        // DOM Event - Set dragstart event function
+        onDragStart: function(event){
+            blockDOM.addEventListener('dragstart', event);
+        },
+
+        // DOM Event - Set drag event function
+        onDrag: function(event){
+            blockDOM.addEventListener('drag', event);
+        },
+
+        // DOM Event - Set dragend event function
+        onDragEnd: function(event){
+            blockDOM.addEventListener('dragend', event);
         },
     }
 }

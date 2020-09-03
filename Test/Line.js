@@ -4,7 +4,7 @@ var Line = function(){
 
     return {
         // DOM - Append to lineArea
-        append:function(lineArea){
+        appendTo:function(lineArea){
             lineArea.appendChild(lineDOM);
         },
 
