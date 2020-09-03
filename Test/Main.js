@@ -1,8 +1,14 @@
+// 테스트 완료
 var ws = new Workspace('test');
-var block1 = new Block();
-var block2 = new Block();
 
-block1.onClick(ws, function(e){});
-block2.onClick(ws, function(e){});
+// 테스트 완료
+var block1 = new Block(ws);
+var block2 = new Block(ws);
 
+// 테스트 완료
+ws.addBlock(block1);
+ws.addBlock(block2);
+
+// 테스트 완료 - 라인 좌표수정 필요합니다.
+ws.connect(block1, block2);
 

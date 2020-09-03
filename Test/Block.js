@@ -1,9 +1,36 @@
-var Block = function(){
+var Block = function(workspace){
     var blockDOM = document.createElement('div');
     blockDOM.style.position = 'absolute';
+    blockDOM.draggable = 'true';
+    blockDOM.style.backgroundColor = '#ddd';
+    blockDOM.style.width = '200px';
+    blockDOM.style.height = '200px';
+
 
     var moveLeftLine = function(e){};
     var moveRightLine = function(e){};
+
+    blockDOM.addEventListener('click', function(e){
+        var isNotSelected = (document.querySelector('.block.start') === null);
+        if (isNotSelected) {
+            blockDOM.className = 'block start';
+            isSelected = true;
+        } else {
+            blockDOM.className = 'block end';
+            isSelected = false;
+
+            var start = document.querySelector('.block.start');
+            var end = document.querySelector('.block.end');
+            
+            workspace.connect(start, end);
+
+            start.classList.remove('start');
+            end.classList.remove('end');
+        }
+
+        event(e);
+    });
+
 
     return {
         // DOM - Append to workspace
@@ -68,26 +95,7 @@ var Block = function(){
 
         // DOM Event - Set click event function
         onClick: function(workspace, event){
-            blockDOM.addEventListener('click', function(e){
-                var isNotSelected = (document.querySelector('.block.start') === null);
-                if (isNotSelected) {
-                    blockDOM.className = 'block start';
-                    isSelected = true;
-                } else {
-                    blockDOM.className = 'block end';
-                    isSelected = false;
-
-                    var start = document.querySelector('.block.start');
-                    var end = document.querySelector('.block.end');
-                    
-                    workspace.connect(start, end);
-
-                    start.classList.remove('start');
-                    end.classList.remove('end');
-                }
-
-                event(e);
-            });
+            
         },
 
         // DOM Event - Set move left line event function

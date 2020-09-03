@@ -37,6 +37,10 @@ var Workspace = function(target){
     var workspace = document.getElementById(target);
     var lineArea = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     lineArea.id = 'lineArea';
+    lineArea.style.position = 'relative';
+    lineArea.style.width = '100%';
+    lineArea.style.height = '100%';
+
     workspace.appendChild(lineArea);
 
     // Line - add/remove
@@ -147,8 +151,8 @@ var Workspace = function(target){
         connect: function(startBlock, endBlock){
             // Component - Add line/startBlock/endBlock Component
             var line = addLine();
-            var startBlockId = addBlock(startBlock);
-            var endBlockId = addBlock(endBlock);
+            var startBlockId = startBlock.id;
+            var endBlockId = startBlock.id;
 
             // ID - Generate
             var id = 'c' + (connectSeq++);
@@ -179,7 +183,8 @@ var Workspace = function(target){
                     connects.splice(i, 1);
                 }
             });
-        }
+        },
+        addBlock: addBlock
     }
 }
 
