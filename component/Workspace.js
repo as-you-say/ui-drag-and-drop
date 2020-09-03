@@ -23,11 +23,11 @@ var Workspace = function(target){
             lineId: ''
         }
     ];
-    var start = undefined;
-    var end = undefined;
 
     // DOM Setting
     var workspace = document.getElementById(target);
+    var dl = workspace.getBoundingClientRect().x;
+    var dt = workspace.getBoundingClientRect().y;
     var lineArea = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     lineArea.id = 'lineArea';
     lineArea.style.position = 'relative';
@@ -93,15 +93,14 @@ var Workspace = function(target){
         );
         newBlock.onDrag(
           function(e){
-            console.log(e);
-            newBlock.setLeft(e.pageX);
-            newBlock.setTop(e.pageY);
+            newBlock.setLeft(e.pageX-dl);
+            newBlock.setTop(e.pageY-dt);
           }
         );
         newBlock.onDragEnd(
           function(e){
-            newBlock.setLeft(e.pageX);
-            newBlock.setTop(e.pageY);
+            newBlock.setLeft(e.pageX-dl);
+            newBlock.setTop(e.pageY-dt);
           }
         );
 
@@ -143,50 +142,56 @@ var Workspace = function(target){
     return {
         // Connect - add/remove
         connect: function(startBlock, endBlock){
-            // Component - Add line/startBlock/endBlock Component
-            var line = addLine(startBlock, endBlock);
-            var startBlockId = startBlock.id;
-            var endBlockId = endBlock.id;
+          // Component - Add line/startBlock/endBlock Component
+          var line = addLine(startBlock, endBlock);
+          var startBlockId = startBlock.id;
+          var endBlockId = endBlock.id;
 
-            // ID - Generate
-            var id = 'c' + (connectSeq++);
+          // ID - Generate
+          var id = 'c' + (connectSeq++);
 
-            // Status - Add connect status to connects
-            connects.push({
-                id: id,
-                startBlockId: startBlockId,
-                endBlockId: endBlockId,
-                lineId: line.id
-            });
+          // Status - Add connect status to connects
+          connects.push({
+              id: id,
+              startBlockId: startBlockId,
+              endBlockId: endBlockId,
+              lineId: line.id
+          });
 
-            line.setX1(startBlock.getBoundingClientRect().x + 100);
-            line.setY1(startBlock.getBoundingClientRect().y + 100);
-            line.setX2(endBlock.getBoundingClientRect().x + 100);
-            line.setY2(endBlock.getBoundingClientRect().y + 100);
+          // DOM Event - set line move event
+          startBlockConponent = blocks.filter(function(o){return o.id === startBlockId;})[0].component;
+          startBlockConponent.onMoveRightLine(function(e){
+            line.setX1(e.pageX - dl);
+            line.setY1(e.pageY - dt);
+          })
 
-            // DOM Event - set line move event
-            startBlockConponent = blocks.filter(function(o){return o.id === startBlockId;})[0].component;
-            startBlockConponent.onMoveRightLine(function(e){
-              line.setX1(e.pageX);
-              line.setY1(e.pageY);
-            })
+          endBlockConponent = blocks.filter(function(o){return o.id === endBlockId;})[0].component;
+          endBlockConponent.onMoveLeftLine(function(e){
+            line.setX2(e.pageX - dl);
+            line.setY2(e.pageY - dt);
+          })
 
-            endBlockConponent = blocks.filter(function(o){return o.id === endBlockId;})[0].component;
-            endBlockConponent.onMoveLeftLine(function(e){
-                line.setX2(e.pageX);
-                line.setY2(e.pageY);
-            })
+          line.setX1(startBlock.getBoundingClientRect().x - dl + startBlockConponent.getWidth()/2);
+          line.setY1(startBlock.getBoundingClientRect().y - dt + startBlockConponent.getHeight()/2);
+          line.setX2(endBlock.getBoundingClientRect().x - dl + endBlockConponent.getWidth()/2);
+          line.setY2(endBlock.getBoundingClientRect().y - dt + endBlockConponent.getHeight()/2);
         },
         disconnect: function(connectId){
-            // Line - Remove connect status
-            connects.filter(function(connect, i){
-                var isTargetConnect = (connect.id === connectId);
-                if (isTargetConnect) {
-                    connects.splice(i, 1);
-                }
-            });
+          // Line - Remove connect status
+          connects.filter(function(connect, i){
+              var isTargetConnect = (connect.id === connectId);
+              if (isTargetConnect) {
+                  connects.splice(i, 1);
+              }
+          });
         },
-        addBlock: addBlock
+        addBlock: addBlock,
+        getDeltaLeft: function(){
+          return dl;
+        },
+        getDeltaTop: function(){
+          return dt;
+        }
     }
 }
 

@@ -13,18 +13,26 @@ var Block = function(workspace, innerHTML){
   blockDOM.addEventListener('click', function(e){
     var isNotSelected = (document.querySelector('.block.start') === null);
     if (isNotSelected) {
-      blockDOM.className = 'block on start';
+      if(!blockDOM.classList.contains('start')){
+        blockDOM.classList.add('start');
+      }
       isSelected = true;
     } else {
-      blockDOM.className = 'block on end';
+      if(!blockDOM.classList.contains('end')){
+        blockDOM.classList.add('end');
+      }
       isSelected = false;
 
       var start = document.querySelector('.block.start');
       var end = document.querySelector('.block.end');
-      
-      workspace.connect(start, end);
 
+      if(start.id !== end.id && !start.classList.contains('connected') && !end.classList.contains('connected')) {
+        workspace.connect(start, end);
+      }
+
+      start.classList.add('connected');
       start.classList.remove('start');
+      end.classList.add('connected');
       end.classList.remove('end');
     }
   });

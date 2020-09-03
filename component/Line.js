@@ -5,6 +5,7 @@ var Line = function(){
     return {
         // DOM - Append to lineArea
         appendTo:function(lineArea){
+            lineDOM.style.opacity = 0;
             lineArea.appendChild(lineDOM);
         },
 
@@ -20,22 +21,26 @@ var Line = function(){
 
         // DOM - Set x1
         setX1:function(x1){
-            lineDOM.setAttribute('x1', x1);
+          lineDOM.style.opacity = 1;
+          lineDOM.setAttribute('x1', x1);
         },
 
         // DOM - Set y1
         setY1:function(y1){
-            lineDOM.setAttribute('y1', y1);
+          lineDOM.style.opacity = 1;
+          lineDOM.setAttribute('y1', y1);
         },
 
         // DOM - Set x2
         setX2:function(x2){
-            lineDOM.setAttribute('x2', x2);
+          lineDOM.style.opacity = 1;
+          lineDOM.setAttribute('x2', x2);
         },
 
         // DOM - Set y2
         setY2:function(y2){
-            lineDOM.setAttribute('y2', y2);
+          lineDOM.style.opacity = 1;
+          lineDOM.setAttribute('y2', y2);
         },
         
     }

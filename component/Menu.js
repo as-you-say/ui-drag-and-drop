@@ -8,12 +8,12 @@ var Menu = function(ws, id, innerHTML){
     e.dataTransfer.setDragImage(img, 0, 0);
   })
   menuDOM.addEventListener('drag',function(e){
-    block.setLeft(e.pageX);
-    block.setTop(e.pageY);
+    block.setLeft(e.pageX - ws.getDeltaLeft());
+    block.setTop(e.pageY - ws.getDeltaTop());
     block.setClass('block on');
   })
   menuDOM.addEventListener('dragend',function(e){
-    block.setLeft(e.pageX);
-    block.setTop(e.pageY);
+    block.setLeft(e.pageX - ws.getDeltaLeft());
+    block.setTop(e.pageY - ws.getDeltaTop());
   })
 }

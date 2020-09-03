@@ -9,8 +9,6 @@ svg line {
 .block {
   background-color: #22dd44;
   position: absolute;
-  width: 200px;
-  height: 200px;
   z-index: 5;
   opacity: 0;
 }
@@ -40,7 +38,7 @@ svg line {
 #contents {
   position: relative;
   top: 0;
-  left: 0;
+  left: 200px;
   height: 100vh;
   display: block;
   background-color: #ddd;
